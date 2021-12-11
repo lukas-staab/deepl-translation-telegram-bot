@@ -1,0 +1,21 @@
+{
+    "name": "lukas-staab/deepl-translation-telegram-bot",
+    "description": "description",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lukas Staab",
+            "email": "lukas.staab@posteo.de"
+        }
+    ],
+    "require": {
+        "longman/telegram-bot": "^0.74.0",
+        "guzzlehttp/guzzle": "^7.4",
+        "vlucas/phpdotenv": "^5.4"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}
