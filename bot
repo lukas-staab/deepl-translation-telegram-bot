@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+use Monolog\Handler\RotatingFileHandler;
+use Symfony\Component\Console\Application;
+
+const ROOT = __DIR__;
+require ROOT .'/vendor/autoload.php';
+
+
+$dot = \Dotenv\Dotenv::createImmutable(ROOT );
+$dot->load();
+
+$logger = new \Monolog\Logger('cli', [
+    new RotatingFileHandler(ROOT . '/log/cli.log')
+]);
+
+$app = new Application();
+foreach (scandir(__DIR__ . '/lib/cli/') as $fileName){
+    if(str_ends_with($fileName, '.php')){
+        $app->add(new ('\\cli\\' . substr($fileName, 0, -4))); // remove .php from filename
+    }
+}
+
+$app->run();
