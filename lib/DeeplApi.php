@@ -44,4 +44,34 @@ class DeeplApi
         }
         return null;
     }
+
+    #[\JetBrains\PhpStorm\ArrayShape(['character_count' => 'int', 'character_limit' => 'int'])]
+    public function getUsage() : ?array
+    {
+        try {
+            $res = $this->client->post('translate', [
+                'form_params' => [
+                        'auth_key' => $this->apiKey,
+                ]
+            ]);
+            $json = $res->getBody()->getContents();
+            return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (GuzzleException|JsonException $exception){
+            echo $exception->getMessage();
+        }
+        return null;
+    }
+
+    /**
+     * Tests if char amount is still inside the charlimits
+     * @param int $charAmount
+     * @return bool true if amount is inside limit, false if not
+     */
+    public function checkUsage(int $charAmount) : bool
+    {
+        $res = $this->getUsage();
+        $usage = (int) $res['character_count'];
+        $limit =  (int) $res['character_limit'];
+        return $usage + $charAmount <= $limit;
+    }
 }
