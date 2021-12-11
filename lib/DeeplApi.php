@@ -21,9 +21,10 @@ class DeeplApi
      * @param string $text
      * @param string $targetLanguage
      * @param string|null $sourceLanguage
+     * @param bool $appendWarning appends a message how much chars are left.
      * @return array|null
      */
-    public function translate(string $text, string $targetLanguage, string $sourceLanguage = null) : ? string
+    public function translate(string $text, string $targetLanguage, string $sourceLanguage = null, bool $appendWarning = true) : ? string
     {
         try {
             $res = $this->client->post('translate', [
@@ -38,14 +39,19 @@ class DeeplApi
             ]);
             $json = $res->getBody()->getContents();
             $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-            return $result['translations'][0]['text'];
+            $translation = $result['translations'][0]['text'];
+            if($appendWarning){
+                $usage = $this->getUsage();
+                $translation .= PHP_EOL . 'You used ' . $usage['character_percent'] . '% of your deepL contingent';
+            }
+            return $translation;
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();
         }
         return null;
     }
 
-    #[\JetBrains\PhpStorm\ArrayShape(['character_count' => 'int', 'character_limit' => 'int'])]
+    #[\JetBrains\PhpStorm\ArrayShape(['character_count' => 'int', 'character_limit' => 'int', 'character_percent' => 'int'])]
     public function getUsage() : ?array
     {
         try {
@@ -55,7 +61,9 @@ class DeeplApi
                 ]
             ]);
             $json = $res->getBody()->getContents();
-            return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            $array['character_percent'] = (int) ((1.00 * $array['character_count'] / $array['character_limit']) * 100);
+            return $array;
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();
         }

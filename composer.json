@@ -21,6 +21,10 @@
         "roave/security-advisories": "dev-latest"
     },
     "autoload": {
-        "psr-4" : {"" :  "lib/"}
+        "psr-4" : {
+            "Longman\\TelegramBot\\Commands\\UserCommands\\" : "lib/tg/UserCommands",
+            "Longman\\TelegramBot\\Commands\\AdminCommands\\" : "lib/tg/AdminCommands",
+            "" :  "lib/"
+        }
     }
 }
