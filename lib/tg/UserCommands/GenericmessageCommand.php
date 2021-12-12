@@ -4,13 +4,14 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
 
-class GenericCommand extends \Longman\TelegramBot\Commands\Command
+class GenericmessageCommand extends \Longman\TelegramBot\Commands\Command
 {
-    protected $name = 'generic';                      // Your command's name
+    protected $name = Telegram::GENERIC_MESSAGE_COMMAND;                      // Your command's name
     protected $description = 'Default Translation Command'; // Your command description
-    protected $usage = '/translate';                    // Usage of your command
     protected $version = '1.0.0';                  // Version of your command
+    protected $need_mysql = false;
     /**
      * @inheritDoc
      */
