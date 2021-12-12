@@ -26,6 +26,9 @@ class DeeplApi
         $client = new Client([
             'base_uri' =>  $url . 'v2/',
         ]);
+        $logger = new Monolog\Logger('deepl', [
+            new \Monolog\Handler\RotatingFileHandler(ROOT . '/log/telegram.log', 5, $_ENV['LOG_LEVEL'])
+        ]);
         return new self($client, $_ENV['DEEPL_KEY']);
     }
 
@@ -69,7 +72,7 @@ class DeeplApi
         try {
             $res = $this->client->post('translate', [
                 'form_params' => [
-                        'auth_key' => $this->apiKey,
+                    'auth_key' => $this->apiKey,
                 ]
             ]);
             $json = $res->getBody()->getContents();
