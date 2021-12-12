@@ -7,6 +7,26 @@ use Longman\TelegramBot\Exception\TelegramException;
 
 class UsageCommand extends \Longman\TelegramBot\Commands\Command
 {
+    /**
+     * @var string
+     */
+    protected $name = 'usage';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Shows contingent';
+
+    /**
+     * @var string
+     */
+    protected $usage = '/usage';
+
+    /**
+     * @var string
+     */
+    protected $version = '1.0.0';
+
 
     /**
      * @inheritDoc
