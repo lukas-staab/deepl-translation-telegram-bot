@@ -48,11 +48,23 @@ class TranslateCommand extends UserCommand
     public function execute(): ServerResponse
     {
         $msg = $this->getMessage();
+        $text = $msg->getText(true);
         $deepl = \DeeplApi::make();
-        $translate = $deepl->translate($msg->getText(true), 'EN', 'DE', true);
-        $percent = $deepl->getUsage()['character_percent'];
-        $warning = "<i>Your deepL char contingent is at $percent</i>";
-        return $this->replyToChat($translate . PHP_EOL . $warning, [
+        $underContingent = $deepl->checkUsage(strlen($text));
+        if ($underContingent){
+            $translate = $deepl->translate($text, 'EN', 'DE', true);
+            $percent = $deepl->getUsage()['character_percent'];
+            $warning = "<i>Your deepL char contingent is at $percent</i>";
+            return $this->replyToChat($translate . PHP_EOL . $warning, [
+                'disable_notification' => true,
+                'reply_to_message_id' => $msg->getMessageId(),
+                'parse_mode' => 'html',
+            ]);
+        }
+        // over limit :O
+        $usage = $deepl->getUsage();
+        $leftover = $usage['character_limit'] - $usage['character_count'];
+        return $this->replyToChat("Your message is too long. You have no contingent left. Only $leftover chars left :(", [
             'disable_notification' => true,
             'reply_to_message_id' => $msg->getMessageId(),
             'parse_mode' => 'html',
