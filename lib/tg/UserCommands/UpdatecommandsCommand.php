@@ -43,7 +43,6 @@ class UpdatecommandsCommand extends UserCommand
 
     public function execute() : ServerResponse
     {
-
         $message = $this->getMessage();
         $text = trim($this->getMessage()->getText(true));
         $photo = $this->getMessage()->getPhoto();

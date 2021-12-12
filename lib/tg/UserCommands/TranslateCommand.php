@@ -33,7 +33,7 @@ class TranslateCommand extends UserCommand
     /**
      * @var string
      */
-    protected $usage = '/translate';
+    protected $usage = '/translate <text>';
 
     /**
      * @var string
@@ -50,6 +50,11 @@ class TranslateCommand extends UserCommand
         $msg = $this->getMessage();
         $deepl = \DeeplApi::make();
         $translate = $deepl->translate($msg->getText(true), 'EN', 'DE', true);
-        return $this->replyToChat($translate, []);
+        $percent = $deepl->getUsage()['character_percent'];
+        $warning = "<i>Your deepL char contingent is at $percent</i>";
+        return $this->replyToChat($translate . PHP_EOL . $warning, [
+            'disable_notification' => true,
+            'reply_to_message_id' => $msg->getMessageId(),
+        ]);
     }
 }

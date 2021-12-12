@@ -39,7 +39,7 @@ class DeeplApi
      * @param bool $appendWarning appends a message how much chars are left.
      * @return array|null
      */
-    public function translate(string $text, string $targetLanguage, string $sourceLanguage = null, bool $appendWarning = true) : ? string
+    public function translate(string $text, string $targetLanguage, string $sourceLanguage = null) : ? string
     {
         try {
             $res = $this->client->post('translate', [
@@ -54,30 +54,25 @@ class DeeplApi
             ]);
             $json = $res->getBody()->getContents();
             $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-            $translation = $result['translations'][0]['text'];
-            if($appendWarning){
-                $usage = $this->getUsage();
-                $translation .= PHP_EOL . 'You used ' . $usage['character_percent'] . '% of your deepL contingent';
-            }
-            return $translation;
+            return $result['translations'][0]['text'];
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();
         }
         return null;
     }
 
-    #[\JetBrains\PhpStorm\ArrayShape(['character_count' => 'int', 'character_limit' => 'int', 'character_percent' => 'int'])]
+    #[\JetBrains\PhpStorm\ArrayShape(['character_count' => 'int', 'character_limit' => 'int', 'character_percent' => 'string'])]
     public function getUsage() : ?array
     {
         try {
-            $res = $this->client->post('translate', [
+            $res = $this->client->post('usage', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
                 ]
             ]);
             $json = $res->getBody()->getContents();
             $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-            $array['character_percent'] = (int) ((1.00 * $array['character_count'] / $array['character_limit']) * 100);
+            $array['character_percent'] =  number_format((1.00 * $array['character_count'] / $array['character_limit']) * 100,1,',', '') . '%';
             return $array;
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();

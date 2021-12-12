@@ -7,12 +7,14 @@ use Symfony\Component\Console\Application;
 const ROOT = __DIR__;
 require ROOT .'/vendor/autoload.php';
 
-
 $dot = \Dotenv\Dotenv::createImmutable(ROOT );
 $dot->load();
 
+$level = isset($_ENV['debug']) ? \Monolog\Logger::DEBUG : \Monolog\Logger::WARNING;
+$_ENV['LOG_LEVEL'] = $level;
+
 $logger = new \Monolog\Logger('cli', [
-    new RotatingFileHandler(ROOT . '/log/cli.log')
+    new RotatingFileHandler(ROOT . '/log/telegram.log',5, $level)
 ]);
 
 $app = new Application();
