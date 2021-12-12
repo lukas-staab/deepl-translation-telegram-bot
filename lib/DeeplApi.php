@@ -5,8 +5,14 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class DeeplApi
 {
-    private Client $client;
-    private string $apiKey;
+    /**
+     * @var Client
+     */
+    private $client;
+    /**
+     * @var string
+     */
+    private $apiKey;
 
     public function __construct(Client $client, string $apiKey)
     {
