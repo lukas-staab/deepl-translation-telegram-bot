@@ -47,9 +47,11 @@ class TranslateCommand extends UserCommand
      */
     public function execute(): ServerResponse
     {
+        global $logger;
         $msg = $this->getMessage();
-        $deepl = \DeeplApi::make();
-        $translate = $deepl->translate($msg->getText(true), 'EN', 'DE', true);
-        return $this->replyToChat($translate);
+        $logger->debug('Translate', $msg->getRawData());
+        //$deepl = \DeeplApi::make();
+        //$translate = $deepl->translate($msg->getText(true), 'EN', 'DE', true);
+        return $this->replyToChat('OK');
     }
 }

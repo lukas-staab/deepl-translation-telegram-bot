@@ -9,6 +9,7 @@ require ROOT . '/vendor/autoload.php';
 $dot = \Dotenv\Dotenv::createImmutable(ROOT );
 $dot->load();
 
+global $logger;
 $level = isset($_ENV['debug']) ? \Monolog\Logger::DEBUG : \Monolog\Logger::WARNING;
 $logger = new \Monolog\Logger('hook', [
   new RotatingFileHandler(ROOT . '/log/telegram.log', 5, )
