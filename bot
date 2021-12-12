@@ -18,7 +18,8 @@ $logger = new \Monolog\Logger('cli', [
 $app = new Application();
 foreach (scandir(__DIR__ . '/lib/cli/') as $fileName){
     if(str_ends_with($fileName, '.php')){
-        $app->add(new ('\\cli\\' . substr($fileName, 0, -4))); // remove .php from filename
+        $class = '\\cli\\' . substr($fileName, 0, -4);
+        $app->add(new $class); // remove .php from filename
     }
 }
 
