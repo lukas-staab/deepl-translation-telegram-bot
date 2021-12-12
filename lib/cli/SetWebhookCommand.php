@@ -30,7 +30,6 @@ class SetWebhookCommand extends \Symfony\Component\Console\Command\Command
             return Command::FAILURE;
         }
 
-
         return Command::SUCCESS;
     }
 

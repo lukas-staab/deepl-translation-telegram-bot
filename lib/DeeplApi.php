@@ -5,10 +5,16 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class DeeplApi
 {
-    public function __construct(private Client $client, private string $apiKey)
-    {}
+    private Client $client;
+    private string $apiKey;
 
-    public static function make() : static
+    public function __construct(Client $client, string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+        $this->client = $client;
+    }
+
+    public static function make() : DeeplApi
     {
         $url = $_ENV['DEEPL_URL'] . (str_ends_with($_ENV['DEEPL_URL'], '/') ? '' : '/');
         $client = new Client([
