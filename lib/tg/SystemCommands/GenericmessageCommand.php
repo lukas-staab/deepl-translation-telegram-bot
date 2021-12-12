@@ -7,6 +7,7 @@ use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Commands\UserCommands\TranslateCommand;
 use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\TelegramLog;
 
@@ -23,12 +24,13 @@ class GenericmessageCommand extends SystemCommand
     {
         if($this->getUpdate() !== null){
             TelegramLog::debug('GenericMessage update', $this->getUpdate()->getRawData());
-            if($this->getUpdate()->getUpdateType() instanceof Message){
+            if($this->getUpdate()->getUpdateType() === 'message'){
                 return (new TranslateCommand($this->telegram, $this->update))->execute();
             }
+            TelegramLog::debug('MESSAGE TYPE', [$this->getUpdate()->getUpdateType()]);
         }else{
             TelegramLog::debug('GenericMessage update == null');
         }
-        return $this->replyToChat('ok cool');
+        return Request::emptyResponse();
     }
 }
