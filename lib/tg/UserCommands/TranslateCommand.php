@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * This file is part of the TelegramBot package.
+ *
+ * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Longman\TelegramBot\Commands\UserCommands;
+
+use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\ServerResponse;
+use Longman\TelegramBot\Request;
+
+/**
+ * Start command
+ */
+class TranslateCommand extends UserCommand
+{
+    /**
+     * @var string
+     */
+    protected $name = 'translate';
+
+    /**
+     * @var string
+     */
+    protected $description = 'Translate command';
+
+    /**
+     * @var string
+     */
+    protected $usage = '/translate';
+
+    /**
+     * @var string
+     */
+    protected $version = '1.2.0';
+
+    /**
+     * Command execute method
+     *
+     * @return ServerResponse
+     */
+    public function execute(): ServerResponse
+    {
+        $message = $this->getMessage();            // Get Message object
+        $chat_id = $message->getChat()->getId();   // Get the current Chat ID
+        $deepL = \DeeplApi::make();
+        $translation = $deepL->translate($message->getText(true), 'EN', 'DE');
+        $data = [
+            'chat_id' => $chat_id,                 // Set Chat ID to send the message to
+            'text'    => $translation, // Set message to send
+        ];
+        return Request::sendMessage($data);        // Send message!
+    }
+}
