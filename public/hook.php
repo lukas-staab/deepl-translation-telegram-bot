@@ -24,7 +24,7 @@ try {
     // Handle telegram webhook request
     $logger->debug('Incoming msg');
     $telegram->handle();
-} catch (Longman\TelegramBot\Exception\TelegramException $e) {
+} catch (Exception $e) {
     // Silence is golden!
     // log telegram errors
     $logger->error('Telegram Exception: ' . $e->getMessage(), $e->getTrace());
