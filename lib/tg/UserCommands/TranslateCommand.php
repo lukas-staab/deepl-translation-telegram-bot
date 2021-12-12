@@ -14,6 +14,7 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\TelegramLog;
 
 /**
  * Start command
@@ -49,6 +50,7 @@ class TranslateCommand extends UserCommand
     {
         $msg = $this->getMessage();
         $text = $msg->getText(true);
+        TelegramLog::debug('command: translate', $text);
         $deepl = \DeeplApi::make();
         $underContingent = $deepl->checkUsage(strlen($text));
         if ($underContingent){

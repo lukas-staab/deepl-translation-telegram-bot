@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Longman\TelegramBot\TelegramLog;
 
 class DeeplApi
 {
@@ -26,9 +27,6 @@ class DeeplApi
         $client = new Client([
             'base_uri' =>  $url . 'v2/',
         ]);
-        $logger = new Monolog\Logger('deepl', [
-            new \Monolog\Handler\RotatingFileHandler(ROOT . '/log/telegram.log', 5, $_ENV['LOG_LEVEL'])
-        ]);
         return new self($client, $_ENV['DEEPL_KEY']);
     }
 
@@ -36,12 +34,12 @@ class DeeplApi
      * @param string $text
      * @param string $targetLanguage
      * @param string|null $sourceLanguage
-     * @param bool $appendWarning appends a message how much chars are left.
      * @return array|null
      */
     public function translate(string $text, string $targetLanguage, string $sourceLanguage = null) : ? string
     {
         try {
+            TelegramLog::debug('start translation');
             $res = $this->client->post('translate', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
@@ -54,6 +52,7 @@ class DeeplApi
             ]);
             $json = $res->getBody()->getContents();
             $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            TelegramLog::debug('fetched translation');
             return $result['translations'][0]['text'];
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();
@@ -65,6 +64,7 @@ class DeeplApi
     public function getUsage() : ?array
     {
         try {
+            TelegramLog::debug('fetch usage');
             $res = $this->client->post('usage', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
