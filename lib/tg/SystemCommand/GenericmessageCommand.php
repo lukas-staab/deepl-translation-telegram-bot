@@ -1,17 +1,19 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\SystemCommands;
 
 
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 
-class GenericmessageCommand extends \Longman\TelegramBot\Commands\Command
+class GenericmessageCommand extends \Longman\TelegramBot\Commands\SystemCommand
 {
     protected $name = Telegram::GENERIC_MESSAGE_COMMAND;                      // Your command's name
     protected $description = 'Default Translation Command'; // Your command description
     protected $version = '1.0.0';                  // Version of your command
     protected $need_mysql = false;
+
+
     /**
      * @inheritDoc
      */
@@ -19,6 +21,7 @@ class GenericmessageCommand extends \Longman\TelegramBot\Commands\Command
     {
         $message = $this->getMessage();            // Get Message object
         $chat_id = $message->getChat()->getId();   // Get the current Chat ID
+
         $deepL = \DeeplApi::make();
         $translation = $deepL->translate($message->getText(true), 'EN', 'DE');
         $data = [
