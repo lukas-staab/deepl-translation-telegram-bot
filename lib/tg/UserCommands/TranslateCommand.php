@@ -54,7 +54,7 @@ class TranslateCommand extends UserCommand
         $deepl = \DeeplApi::make();
         $underContingent = $deepl->checkUsage(strlen($text));
         if ($underContingent){
-            $translate = $deepl->translate($text, 'EN', 'DE', true);
+            $translate = $deepl->translate($text, 'EN');
             $percent = $deepl->getUsage()['character_percent'];
             $warning = "<i>Your deepL char contingent is at $percent</i>";
             return $this->replyToChat($translate . PHP_EOL . $warning, [
