@@ -1,9 +1,14 @@
 <?php
+define("ROOT", dirname(__DIR__));
+
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set("error_log", ROOT . '/log/php.log');
 
 use Longman\TelegramBot\TelegramLog;
 use Monolog\Handler\RotatingFileHandler;
 
-define("ROOT", dirname(__DIR__));
+
 
 require ROOT . '/vendor/autoload.php';
 
