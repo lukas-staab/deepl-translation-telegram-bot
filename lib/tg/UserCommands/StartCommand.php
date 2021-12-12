@@ -47,10 +47,6 @@ class StartCommand extends UserCommand
      */
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $user_id = $message->getFrom()->getId();
-
-        return Request::sendMessage(['chat_id' => $chat_id, 'user_id' => $user_id, 'text' => 'Hallo zum Deepl Bot!']);
+        return $this->replyToChat('Welcome to deepl bot');
     }
 }

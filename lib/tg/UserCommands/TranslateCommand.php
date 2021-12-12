@@ -47,14 +47,6 @@ class TranslateCommand extends UserCommand
      */
     public function execute(): ServerResponse
     {
-        $message = $this->getMessage();            // Get Message object
-        $chat_id = $message->getChat()->getId();   // Get the current Chat ID
-        $deepL = \DeeplApi::make();
-        $translation = $deepL->translate($message->getText(true), 'EN', 'DE');
-        $data = [
-            'chat_id' => $chat_id,                 // Set Chat ID to send the message to
-            'text'    => $translation, // Set message to send
-        ];
-        return Request::sendMessage($data);        // Send message!
+        return $this->replyToChat('Translation...');
     }
 }
