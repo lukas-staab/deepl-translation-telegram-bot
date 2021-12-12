@@ -55,6 +55,7 @@ class TranslateCommand extends UserCommand
         return $this->replyToChat($translate . PHP_EOL . $warning, [
             'disable_notification' => true,
             'reply_to_message_id' => $msg->getMessageId(),
+            'parse_mode' => 'html',
         ]);
     }
 }
