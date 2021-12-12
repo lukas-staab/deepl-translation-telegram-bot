@@ -6,6 +6,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Commands\UserCommands\TranslateCommand;
 use Longman\TelegramBot\Telegram;
+use Longman\TelegramBot\TelegramLog;
 
 class GenericmessageCommand extends SystemCommand
 {
@@ -18,6 +19,11 @@ class GenericmessageCommand extends SystemCommand
      */
     public function execute(): \Longman\TelegramBot\Entities\ServerResponse
     {
+        if($this->getUpdate() !== null){
+            TelegramLog::debug('GenericMessage update', $this->getUpdate()->getRawData());
+        }else{
+            TelegramLog::debug('GenericMessage update == null');
+        }
         return (new TranslateCommand($this->telegram, $this->update))->execute();
     }
 }
