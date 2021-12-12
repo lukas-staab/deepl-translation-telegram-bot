@@ -96,21 +96,22 @@ class DeeplApi
     /**
      * @param string|null $filter 'source', 'target' or null allowed
      * @return array
-     * @throws GuzzleException
      */
     public function getSupportedLanguages(string $filter = null) : array
     {
         TelegramLog::debug('get supported deepl languages');
         try {
-            $res = $this->client->post('usage', [
+            $res = $this->client->post('languages', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
-                ] + isset($filter) ? [
+                ] + (isset($filter) ? [
                     'type' => $filter
-                ] : [],
+                ] : []),
             ]);
             $json = $res->getBody()->getContents();
-            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            $langs = array_column($result, 'language');
+            return array_combine($langs, $result);
         }catch (GuzzleException|JsonException $exception){
             TelegramLog::debug($exception->getMessage(), $exception->getTrace());
         }

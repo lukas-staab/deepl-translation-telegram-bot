@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DeeplUsage extends \Symfony\Component\Console\Command\Command
+class DeeplUsageCommand extends \Symfony\Component\Console\Command\Command
 {
     protected static $defaultName = 'deepl:usage';
     protected static $defaultDescription = 'Get deepL usage %';
