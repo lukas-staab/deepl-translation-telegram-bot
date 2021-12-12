@@ -5,7 +5,7 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 
-class UsageCommand extends \Longman\TelegramBot\Commands\Command
+class UsageCommand extends \Longman\TelegramBot\Commands\UserCommand
 {
     /**
      * @var string
