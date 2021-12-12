@@ -39,7 +39,7 @@ class DeeplApi
     public function translate(string $text, string $targetLanguage, string $sourceLanguage = null) : ? string
     {
         try {
-            TelegramLog::debug('start translation');
+            TelegramLog::debug('start deepl translation');
             $res = $this->client->post('translate', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
@@ -64,7 +64,7 @@ class DeeplApi
     public function getUsage() : ?array
     {
         try {
-            TelegramLog::debug('fetch usage');
+            TelegramLog::debug('fetch deepl usage');
             $res = $this->client->post('usage', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
@@ -75,7 +75,7 @@ class DeeplApi
             $array['character_percent'] =  number_format((1.00 * $array['character_count'] / $array['character_limit']) * 100,1,',', '') . '%';
             return $array;
         } catch (GuzzleException|JsonException $exception){
-            echo $exception->getMessage();
+            TelegramLog::debug($exception->getMessage(), $exception->getTrace());
         }
         return null;
     }
@@ -91,5 +91,29 @@ class DeeplApi
         $usage = (int) $res['character_count'];
         $limit =  (int) $res['character_limit'];
         return $usage + $charAmount <= $limit;
+    }
+
+    /**
+     * @param string|null $filter 'source', 'target' or null allowed
+     * @return array
+     * @throws GuzzleException
+     */
+    public function getSupportedLanguages(string $filter = null) : array
+    {
+        TelegramLog::debug('get supported deepl languages');
+        try {
+            $res = $this->client->post('usage', [
+                'form_params' => [
+                    'auth_key' => $this->apiKey,
+                ] + isset($filter) ? [
+                    'type' => $filter
+                ] : [],
+            ]);
+            $json = $res->getBody()->getContents();
+            $array = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        }catch (GuzzleException|JsonException $exception){
+            TelegramLog::debug($exception->getMessage(), $exception->getTrace());
+        }
+        return [];
     }
 }

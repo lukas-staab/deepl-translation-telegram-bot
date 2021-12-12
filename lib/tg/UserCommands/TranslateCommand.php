@@ -50,7 +50,7 @@ class TranslateCommand extends UserCommand
     {
         $msg = $this->getMessage();
         $text = $msg->getText(true);
-        TelegramLog::debug('command: translate', $text);
+        TelegramLog::debug('command: translate', [$text]);
         $deepl = \DeeplApi::make();
         $underContingent = $deepl->checkUsage(strlen($text));
         if ($underContingent){
