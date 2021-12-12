@@ -27,6 +27,7 @@
         "psr-4" : {
             "Longman\\TelegramBot\\Commands\\UserCommands\\" : "lib/tg/UserCommands",
             "Longman\\TelegramBot\\Commands\\AdminCommands\\" : "lib/tg/AdminCommands",
+            "Longman\\TelegramBot\\Commands\\SystemCommands\\" : "lib/tg/SystemCommands",
             "" :  "lib/"
         }
     }
