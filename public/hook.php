@@ -16,7 +16,8 @@ $logger = new \Monolog\Logger('hook', [
 try {
     // Create Telegram API object
     $telegram = new Longman\TelegramBot\Telegram($_ENV['TG_BOT_SECRET'], $_ENV['TG_BOT_USERNAME']);
-    $telegram->addCommandsPath(ROOT . 'lib/tg/');
+    $telegram->addCommandsPath(ROOT . 'lib/tg/UserCommands/');
+    $telegram->addCommandsPath(ROOT . 'lib/tg/AdminCommands/');
     // Handle telegram webhook request
     $logger->debug('Incoming msg');
     $telegram->handle();
