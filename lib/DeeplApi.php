@@ -14,6 +14,14 @@ class DeeplApi
      * @var string
      */
     private $apiKey;
+    /**
+     * @var callable
+     */
+    private $unescapeFunction;
+    /**
+     * @var callable
+     */
+    private $escapeFunction;
 
     public function __construct(Client $client, string $apiKey)
     {
@@ -40,6 +48,10 @@ class DeeplApi
     {
         try {
             TelegramLog::debug('start deepl translation');
+            if(isset($this->escapeFunction) && is_callable($this->escapeFunction)){
+                $esc = $this->escapeFunction;
+                $text = $esc($text);
+            }
             $res = $this->client->post('translate', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
@@ -53,7 +65,12 @@ class DeeplApi
             $json = $res->getBody()->getContents();
             $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
             TelegramLog::debug('fetched translation');
-            return $result['translations'][0]['text'];
+            $translation = $result['translations'][0]['text'];
+            if(isset($this->unescapeFunction) && is_callable($this->unescapeFunction)){
+                $unesc = $this->unescapeFunction;
+                $translation = $unesc($translation);
+            }
+            return $translation;
         } catch (GuzzleException|JsonException $exception){
             echo $exception->getMessage();
         }
@@ -116,5 +133,15 @@ class DeeplApi
             TelegramLog::debug($exception->getMessage(), $exception->getTrace());
         }
         return [];
+    }
+
+    public function setEscaper(callable $escape) : void
+    {
+        $this->escapeFunction = $escape;
+    }
+
+    public function setUnescaper(callable $unescape) : void
+    {
+        $this->unescapeFunction = $unescape;
     }
 }

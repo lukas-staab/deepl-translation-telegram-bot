@@ -50,7 +50,7 @@ class TranslateCommand extends UserCommand
     {
         $msg = $this->getMessage();
         $text = $msg->getText(true);
-        if(empty($text)){
+        if($this->ignoreText($text)){
             return Request::emptyResponse();
         }
         TelegramLog::debug('command: translate', [$text]);
@@ -58,13 +58,14 @@ class TranslateCommand extends UserCommand
         $underContingent = $deepl->checkUsage(strlen($text));
         if ($underContingent){
             $translate = $deepl->translate($text, 'EN');
-            $percent = $deepl->getUsage()['character_percent'];
-            $warning = "<i>Your deepL char contingent is at $percent</i>";
-            return $this->replyToChat($translate . PHP_EOL . $warning, [
-                'disable_notification' => true,
-                'reply_to_message_id' => $msg->getMessageId(),
-                'parse_mode' => 'html',
-            ]);
+            if($translate !== $text){
+                return $this->replyToChat($translate, [
+                    'disable_notification' => true,
+                    'reply_to_message_id' => $msg->getMessageId(),
+                    'parse_mode' => 'html',
+                ]);
+            }
+            return Request::emptyResponse();
         }
         // over limit :O
         $usage = $deepl->getUsage();
@@ -75,4 +76,11 @@ class TranslateCommand extends UserCommand
             'parse_mode' => 'html',
         ]);
     }
+
+    private function ignoreText(string $input) : bool
+    {
+        return empty($input);
+    }
+
+
 }
