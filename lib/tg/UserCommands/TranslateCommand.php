@@ -58,13 +58,15 @@ class TranslateCommand extends UserCommand
         $underContingent = $deepl->checkUsage(strlen($text));
         if ($underContingent){
             $translate = $deepl->translate($text, 'EN');
-            if($translate !== $text){
+            TelegramLog::debug($translate);
+            if($translate !== $text || str_starts_with($msg->getText(false), '/' . $this->name)){
                 return $this->replyToChat($translate, [
                     'disable_notification' => true,
                     'reply_to_message_id' => $msg->getMessageId(),
                     'parse_mode' => 'html',
                 ]);
             }
+            TelegramLog::debug('Message and translation are identical - do nothing');
             return Request::emptyResponse();
         }
         // over limit :O
