@@ -19,6 +19,9 @@ $level = isset($_ENV['debug']) ? \Monolog\Logger::DEBUG : \Monolog\Logger::WARNI
 $logger = new \Monolog\Logger('hook', [
   new RotatingFileHandler(ROOT . '/log/telegram.log', 5, $level)
 ]);
+$updateLog = new \Monolog\Logger('update', [
+    new RotatingFileHandler(ROOT . '/log/telegram.log', 5, $level)
+]);
 
 const ADMIN_IDS = [
     74241675, //Lukas
@@ -27,7 +30,7 @@ const ADMIN_IDS = [
 
 try {
     // Create Telegram API object
-    TelegramLog::initialize($logger);
+    TelegramLog::initialize($logger, $updateLog);
     $telegram = new Longman\TelegramBot\Telegram($_ENV['TG_BOT_SECRET'], $_ENV['TG_BOT_USERNAME']);
     $telegram->addCommandsPaths([
         ROOT . '/lib/tg/UserCommands/',
