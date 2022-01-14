@@ -9,7 +9,7 @@ class DeeplApi
     /**
      * @var Client
      */
-    private $client;
+    private $httpClient;
     /**
      * @var string
      */
@@ -26,7 +26,7 @@ class DeeplApi
     public function __construct(Client $client, string $apiKey)
     {
         $this->apiKey = $apiKey;
-        $this->client = $client;
+        $this->httpClient = $client;
     }
 
     public static function make() : DeeplApi
@@ -52,7 +52,7 @@ class DeeplApi
                 $esc = $this->escapeFunction;
                 $text = $esc($text);
             }
-            $res = $this->client->post('translate', [
+            $res = $this->httpClient->post('translate', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
                     'target_lang' => $targetLanguage,
@@ -82,7 +82,7 @@ class DeeplApi
     {
         try {
             TelegramLog::debug('fetch deepl usage');
-            $res = $this->client->post('usage', [
+            $res = $this->httpClient->post('usage', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
                 ]
@@ -118,7 +118,7 @@ class DeeplApi
     {
         TelegramLog::debug('get supported deepl languages');
         try {
-            $res = $this->client->post('languages', [
+            $res = $this->httpClient->post('languages', [
                 'form_params' => [
                     'auth_key' => $this->apiKey,
                 ] + (isset($filter) ? [
