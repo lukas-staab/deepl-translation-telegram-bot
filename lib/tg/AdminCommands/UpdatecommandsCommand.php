@@ -1,18 +1,16 @@
 <?php
 
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\AdminCommands;
 
 
 use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Commands\Command;
-use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\TelegramLog;
 
-class UpdatecommandsCommand extends UserCommand
+class UpdatecommandsCommand extends AdminCommand
 {
     /**
      * @var string
