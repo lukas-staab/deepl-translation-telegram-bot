@@ -1,11 +1,10 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\AdminCommands;
 
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Exception\TelegramException;
 
-class UsageCommand extends \Longman\TelegramBot\Commands\UserCommand
+class UsageCommand extends \Longman\TelegramBot\Commands\AdminCommand
 {
     /**
      * @var string

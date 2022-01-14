@@ -19,6 +19,12 @@ $level = isset($_ENV['debug']) ? \Monolog\Logger::DEBUG : \Monolog\Logger::WARNI
 $logger = new \Monolog\Logger('hook', [
   new RotatingFileHandler(ROOT . '/log/telegram.log', 5, $level)
 ]);
+
+const ADMIN_IDS = [
+    74241675, //Lukas
+    2018213, //Vanessa
+];
+
 try {
     // Create Telegram API object
     TelegramLog::initialize($logger);
@@ -28,6 +34,7 @@ try {
         ROOT . '/lib/tg/AdminCommands/',
         ROOT . '/lib/tg/SystemCommands/'
     ]);
+    $telegram->enableAdmins(ADMIN_IDS);
     // Handle telegram webhook request
     $telegram->handle();
 } catch (Exception $e) {
