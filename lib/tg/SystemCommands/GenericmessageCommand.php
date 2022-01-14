@@ -25,7 +25,22 @@ class GenericmessageCommand extends SystemCommand
         if($this->getUpdate() !== null){
             TelegramLog::debug('GenericMessage update', $this->getUpdate()->getRawData());
             if($this->getUpdate()->getUpdateType() === 'message'){
-                return (new TranslateCommand($this->telegram, $this->update))->execute();
+                foreach($this->getMessage()->getNewChatMembers() as $user){
+                    if($user->getBotUsername() === $this->telegram->getBotUsername()){
+                        // if this bot was added to a chat
+                        $chat = $this->getMessage()->getChat();
+                        $userWhoAdded = $this->getMessage()->getFrom();
+                        if(!$this->telegram->isAdmin($userWhoAdded->getId())){
+                            $this->replyToChat('Only my admin(s) can add me to a new group.');
+                            return Request::leaveChat(['chat_id' => $chat->getId()]);
+                        }
+                        // admin added me - all fine
+                        return Request::emptyResponse();
+                    }
+                }
+                if(!empty($this->getMessage()->getText())){
+                    return (new TranslateCommand($this->telegram, $this->update))->execute();
+                }
             }
             TelegramLog::debug('MESSAGE TYPE', [$this->getUpdate()->getUpdateType()]);
         }else{
