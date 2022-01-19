@@ -26,7 +26,7 @@ class GenericmessageCommand extends SystemCommand
             TelegramLog::debug('GenericMessage update', $this->getUpdate()->getRawData());
             if($this->getUpdate()->getUpdateType() === 'message'){
                 foreach($this->getMessage()->getNewChatMembers() as $user){
-                    if($user->getBotUsername() === $this->telegram->getBotUsername()){
+                    if($user->getIsBot() && $user->getBotUsername() === $this->telegram->getBotUsername()){
                         // if this bot was added to a chat
                         $chat = $this->getMessage()->getChat();
                         $userWhoAdded = $this->getMessage()->getFrom();
