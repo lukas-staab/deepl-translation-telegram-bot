@@ -30,7 +30,9 @@ class GenericmessageCommand extends SystemCommand
                         // if this bot was added to a chat
                         $chat = $this->getMessage()->getChat();
                         $userWhoAdded = $this->getMessage()->getFrom();
+                        TelegramLog::debug('This bot was added to a group');
                         if(!$this->telegram->isAdmin($userWhoAdded->getId())){
+                            TelegramLog::debug('From a person without admin priv');
                             $this->replyToChat('Only my admin(s) can add me to a new group.');
                             return Request::leaveChat(['chat_id' => $chat->getId()]);
                         }
